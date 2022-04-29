@@ -11,6 +11,9 @@ var config = {
         }
     },
     scene: [ GameScene ]
-}
+};
+
+var cursors;
+var player;
 
 var game = new Phaser.Game(config);
