@@ -15,6 +15,9 @@ var config = {
 
 var cursors;
 var player;
+var group;
+var spawnInterval = 60;
+var spawnTimer = 0;
 var posX = [config.width / 4, config.width / 2, config.width / 4 * 3];
 var posY = config.height / 4 * 3;
 var currX = 1;
