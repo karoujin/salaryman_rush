@@ -10,18 +10,20 @@ class GameScene extends Phaser.Scene {
 
     create() {
         this.cameras.main.setBackgroundColor(0x4488aa);
-        player = this.physics.add.image(config.width / 2, config.height / 4 * 3, 'player');
+        player = this.physics.add.image(posX[1], posY, 'player');
+        player.setScale(0.3);
 
         /* Handle inputs */
         cursors = this.input.keyboard.createCursorKeys();
     }
 
     update() {
-        if (cursors.left.isDown) {
-            player.setVelocityX(-300);
+        if (cursors.left.isDown && currX > 0) {
+            currX -= 1;
         }
-        else if (cursors.right.isDown) {
-            player.setVelocityX(300);
+        else if (cursors.right.isDown && currX < 2) {
+            currX += 1
         }
+        player.setPosition(posX[currX], posY);
     }
 }
