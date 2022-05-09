@@ -18,5 +18,6 @@ var player;
 var posX = [config.width / 4, config.width / 2, config.width / 4 * 3];
 var posY = config.height / 4 * 3;
 var currX = 1;
+var lastFrameKey = 0;
 
 var game = new Phaser.Game(config);
