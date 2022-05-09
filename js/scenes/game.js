@@ -15,7 +15,7 @@ class GameScene extends Phaser.Scene {
 
         group = this.add.group({
             defaultKey: 'passerby',
-            maxSize: 5,
+            maxSize: 10,
             createCallback: function (passerby) {
                 passerby.setName('passerby' + this.getLength());
                 console.log('Created', passerby.name);
@@ -47,7 +47,7 @@ class GameScene extends Phaser.Scene {
         }
         player.setPosition(posX[currX], posY);
 
-        Phaser.Actions.IncY(group.getChildren(), 1);
+        Phaser.Actions.IncY(group.getChildren(), 2.5);
 
         group.children.iterate(function (passerby) {
             if (passerby.y > 600) {
@@ -80,10 +80,10 @@ function addPasserby() {
 
     // Find first inactive sprite in group or add new sprite, and set position
     const passerby = group.get(spawnX, y);
-    passerby.setScale(0.3);
 
     // None free or already at maximum amount of sprites in group
     if (!passerby) return;
+    passerby.setScale(0.5);
 
     passBy(passerby);
 }
