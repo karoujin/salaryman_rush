@@ -30,11 +30,20 @@ class GameScene extends Phaser.Scene {
     }
 
     update() {
-        if (cursors.left.isDown && currX > 0) {
-            currX -= 1;
+        if (cursors.left.isDown) {
+            if (currX > 0 && lastFrameKey >= 0) {
+                currX -= 1;
+            }
+            lastFrameKey = -1;
         }
-        else if (cursors.right.isDown && currX < 2) {
-            currX += 1
+        else if (cursors.right.isDown) {
+            if (currX < 2 && lastFrameKey <= 0) {
+                currX += 1
+            }
+            lastFrameKey = 1;
+        }
+        else {
+            lastFrameKey = 0;
         }
         player.setPosition(posX[currX], posY);
 
