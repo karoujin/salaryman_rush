@@ -15,6 +15,7 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0x444c4e);
         player = this.physics.add.image(posX[1], posY, 'player');
         player.setScale(0.3);
+        /* player.setDepth(1); */
 
         passerbyGroup = this.add.group({
             defaultKey: 'passerby',
@@ -27,9 +28,11 @@ class GameScene extends Phaser.Scene {
                 console.log('Removed', passerby.name);
             }
         });
+        /* passerbyGroup.setDepth(2); */
         
         heightMark = this.add.image(config.width/2, posY, 'heightMark');
         heightMark.setScale(1, 0.2);
+        heightMark.setDepth(1);
         
         buildings = [
             this.physics.add.image(config.width / 9, 0, 'building'),
@@ -42,33 +45,8 @@ class GameScene extends Phaser.Scene {
             building.setScale(0.2);
             building.setVelocityY(500);
         });
-        
+        /* buildings.setDepth(4); */
 
-        /* lineGroup = this.add.group({
-            defaultKey: 'line',
-            maxSize: 10,
-            createCallback: function (line) {
-                line.setName('passerby' + this.getLength());
-                console.log('Created', line.name);
-            },
-            removeCallback: function (line) {
-                console.log('Removed', line.name);
-            }
-        });
-
-        buildingGroup = this.add.group({
-            defaultKey: 'building',
-            maxSize: 3,
-            createCallback: function (building) {
-                building.setName('passerby' + this.getLength());
-                console.log('Created', building.name);
-            },
-            removeCallback: function (building) {
-                console.log('Removed', building.name);
-            }
-        }); */
-
-        /* Handle inputs */
         cursors = this.input.keyboard.createCursorKeys();
     }
 
