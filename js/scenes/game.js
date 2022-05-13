@@ -9,6 +9,9 @@ class GameScene extends Phaser.Scene {
         this.load.image('building', '../Res/building.png');
         this.load.image('line', '../Res/line.png');
         this.load.image('heightMark', '../Res/heightMark.png');
+        this.load.image('continue', '../Res/continue.png');
+        this.load.image('exit', '../Res/exit.png');
+
     }
 
     create() {
@@ -30,12 +33,12 @@ class GameScene extends Phaser.Scene {
                 console.log('Removed', passerby.name);
             }
         });
-        
+
         /* Create height marker */
-        heightMark = this.add.image(config.width/2, posY, 'heightMark');
+        heightMark = this.add.image(config.width / 2, posY, 'heightMark');
         heightMark.setScale(1, 0.2);
         heightMark.setDepth(1);
-        
+
         /* Create buildings and set their Vel */
         buildings = [
             this.physics.add.image(config.width / 9, 0, 'building'),
@@ -48,11 +51,13 @@ class GameScene extends Phaser.Scene {
             building.setScale(0.2);
             building.setVelocityY(500);
         });
-        
+
         /* Add score counter */
-        counter = this.add.text(config.width/5 * 4, 50, 'Score: ' + score);
+        counter = this.add.text(config.width / 5 * 4, 50, 'Score: ' + score);
         /* Handler for key inputs */
         cursors = this.input.keyboard.createCursorKeys();
+        pause = this.input.keyboard.addKey('ESC');
+
     }
 
     update() {
@@ -74,43 +79,50 @@ class GameScene extends Phaser.Scene {
             lastFrameKey = 0;
         }
         player.setPosition(posX[currX], posY);
-        
+
         /* Passerby movement */
         Phaser.Actions.IncY(passerbyGroup.getChildren(), 5);
-        
+
         /* Loop for building "generation" */
         buildings.forEach(building => {
             if (building.y > 700) {
                 building.y = -100;
             }
         });
-        
+
         /* Handler for Passerby iterations */
         passerbyGroup.children.iterate(function (passerby) {
             if (passerby.y > 600) {
                 passerbyGroup.killAndHide(passerby);
             }
-            else if (Math.abs(passerby.y - posY) < 5 && posX[currX] == passerby.x){
+            else if (Math.abs(passerby.y - posY) < 5 && posX[currX] == passerby.x) {
                 alert("you lost");
-                
+
             }
         });
-        
-        
+
+
         /* Generation timer for Passerby */
         if (spawnTimer == 0) {
             addPasserby();
             spawnTimer = Math.floor(spawnInterval);
             spawnInterval -= (spawnInterval - 2) / 50.0;
         }
-        
+
         spawnTimer -= 1;
-        
+
         /* Score Handler */
 
         counter.setText('Score: ' + score);
-        score+=1;
-        
+        score += 1;
+
+        /* this.input.keyboard.on(Phaser.Input.Keyboard.Key.ESC, function() {
+            console.log('Pause');
+        }); */
+        if (pause.isDown) {
+            this.Scene.launch('pause');
+            this.Scene.pause();
+        }
     }
 }
 
