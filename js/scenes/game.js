@@ -90,9 +90,14 @@ class GameScene extends Phaser.Scene {
             if (passerby.y > 600) {
                 passerbyGroup.killAndHide(passerby);
             }
-            else if (Math.abs(passerby.y - posY) < 2.5 && posX[currX] == passerby.x){
-                alert("you lost");
-                
+            else if (Math.abs(passerby.y - posY) < 2.5){
+                if (posX[currX] == passerby.x) {
+                    alert("you lost");
+                }
+                else {
+                    score += 1;
+                    counter.setText('Score: ' + score);
+                }
             }
         });
         
@@ -105,11 +110,6 @@ class GameScene extends Phaser.Scene {
         }
         
         spawnTimer -= 1;
-        
-        /* Score Handler */
-
-        counter.setText('Score: ' + score);
-        score+=1;
         
     }
 }
