@@ -29,7 +29,7 @@ class GameScene extends Phaser.Scene {
         });
         
         heightMark = this.add.image(config.width/2, posY, 'heightMark');
-        heightMark.setScaleY(0.2);
+        heightMark.setScale(0.2);
         
         buildings = [
             this.physics.add.image(config.width / 9, 0, 'building'),
