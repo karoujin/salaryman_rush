@@ -6,16 +6,19 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.load.image('player', '../Res/player.png');
         this.load.image('passerby', '../Res/passerby.png');
+        this.load.image('building', '../Res/building.png');
+        this.load.image('line', '../Res/line.png');
+        this.load.image('heightMark', '../Res/heightMark.png');
     }
 
     create() {
-        this.cameras.main.setBackgroundColor(0x4488aa);
+        this.cameras.main.setBackgroundColor(0x444c4e);
         player = this.physics.add.image(posX[1], posY, 'player');
         player.setScale(0.3);
 
-        group = this.add.group({
+        passerbyGroup = this.add.group({
             defaultKey: 'passerby',
-            maxSize: 10,
+            maxSize: 15,
             createCallback: function (passerby) {
                 passerby.setName('passerby' + this.getLength());
                 console.log('Created', passerby.name);
@@ -24,6 +27,46 @@ class GameScene extends Phaser.Scene {
                 console.log('Removed', passerby.name);
             }
         });
+        
+        heightMark = this.add.image(config.width/2, posY, 'heightMark');
+        heightMark.setScaleY(0.2);
+        
+        buildings = [
+            this.physics.add.image(config.width / 9, 0, 'building'),
+            this.physics.add.image(config.width / 9, -200, 'building'),
+            this.physics.add.image(config.width / 9, -400, 'building'),
+            this.physics.add.image(config.width / 9, -600, 'building')
+        ];
+
+        buildings.forEach(building => {
+            building.setScale(0.2);
+            building.setVelocityY(500);
+        });
+        
+
+        /* lineGroup = this.add.group({
+            defaultKey: 'line',
+            maxSize: 10,
+            createCallback: function (line) {
+                line.setName('passerby' + this.getLength());
+                console.log('Created', line.name);
+            },
+            removeCallback: function (line) {
+                console.log('Removed', line.name);
+            }
+        });
+
+        buildingGroup = this.add.group({
+            defaultKey: 'building',
+            maxSize: 3,
+            createCallback: function (building) {
+                building.setName('passerby' + this.getLength());
+                console.log('Created', building.name);
+            },
+            removeCallback: function (building) {
+                console.log('Removed', building.name);
+            }
+        }); */
 
         /* Handle inputs */
         cursors = this.input.keyboard.createCursorKeys();
@@ -47,27 +90,40 @@ class GameScene extends Phaser.Scene {
         }
         player.setPosition(posX[currX], posY);
 
-        Phaser.Actions.IncY(group.getChildren(), 2.5);
+        Phaser.Actions.IncY(passerbyGroup.getChildren(), 5);
 
-        group.children.iterate(function (passerby) {
+
+        passerbyGroup.children.iterate(function (passerby) {
             if (passerby.y > 600) {
-                group.killAndHide(passerby);
+                passerbyGroup.killAndHide(passerby);
+            }
+            else if (Math.abs(passerby.y - posY) < 5 && posX[currX] == passerby.x){
+                alert("you lost");
+
+            }
+        });
+
+
+        buildings.forEach(building => {
+            if (building.y > 700) {
+                building.y = -100;
             }
         });
 
         if (spawnTimer == 0) {
             addPasserby();
-            spawnTimer = spawnInterval;
-            spawnInterval -= 1;
+            spawnTimer = Math.floor(spawnInterval);
+            spawnInterval -= (spawnInterval - 2) / 50.0;
         }
+
         spawnTimer -= 1;
 
-
+        
     }
 }
 
-function passBy(passerby) {
-    passerby
+function activate(object) {
+    object
         .setActive(true)
         .setVisible(true)
 }
@@ -78,12 +134,12 @@ function addPasserby() {
     var spawnX = posX[x];
     const y = 0;
 
-    // Find first inactive sprite in group or add new sprite, and set position
-    const passerby = group.get(spawnX, y);
+    // Find first inactive sprite in passerbyGroup or add new sprite, and set position
+    const passerby = passerbyGroup.get(spawnX, y);
 
-    // None free or already at maximum amount of sprites in group
+    // None free or already at maximum amount of sprites in passerbyGroup
     if (!passerby) return;
     passerby.setScale(0.5);
 
-    passBy(passerby);
+    activate(passerby);
 }
