@@ -12,11 +12,13 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        /* Set background */
         this.cameras.main.setBackgroundColor(0x444c4e);
+        /* Create player */
         player = this.physics.add.image(posX[1], posY, 'player');
         player.setScale(0.3);
-        /* player.setDepth(1); */
 
+        /* Create Passerby */
         passerbyGroup = this.add.group({
             defaultKey: 'passerby',
             maxSize: 15,
@@ -28,12 +30,13 @@ class GameScene extends Phaser.Scene {
                 console.log('Removed', passerby.name);
             }
         });
-        /* passerbyGroup.setDepth(2); */
         
+        /* Create height marker */
         heightMark = this.add.image(config.width/2, posY, 'heightMark');
         heightMark.setScale(1, 0.2);
         heightMark.setDepth(1);
         
+        /* Create buildings and set their Vel */
         buildings = [
             this.physics.add.image(config.width / 9, 0, 'building'),
             this.physics.add.image(config.width / 9, -200, 'building'),
@@ -45,12 +48,16 @@ class GameScene extends Phaser.Scene {
             building.setScale(0.2);
             building.setVelocityY(500);
         });
-        /* buildings.setDepth(4); */
-
+        
+        /* Add score counter */
+        counter = this.add.text(config.width/5 * 4, 50, 'Score: ' + score);
+        /* Handler for key inputs */
         cursors = this.input.keyboard.createCursorKeys();
     }
 
     update() {
+
+        /* Movement Handler for player */
         if (cursors.left.isDown) {
             if (currX > 0 && lastFrameKey >= 0) {
                 currX -= 1;
@@ -67,35 +74,42 @@ class GameScene extends Phaser.Scene {
             lastFrameKey = 0;
         }
         player.setPosition(posX[currX], posY);
-
+        
+        /* Passerby movement */
         Phaser.Actions.IncY(passerbyGroup.getChildren(), 5);
-
-
+        
+        /* Loop for building "generation" */
+        buildings.forEach(building => {
+            if (building.y > 700) {
+                building.y = -100;
+            }
+        });
+        
+        /* Handler for Passerby iterations */
         passerbyGroup.children.iterate(function (passerby) {
             if (passerby.y > 600) {
                 passerbyGroup.killAndHide(passerby);
             }
             else if (Math.abs(passerby.y - posY) < 5 && posX[currX] == passerby.x){
                 alert("you lost");
-
+                
             }
         });
-
-
-        buildings.forEach(building => {
-            if (building.y > 700) {
-                building.y = -100;
-            }
-        });
-
+        
+        
+        /* Generation timer for Passerby */
         if (spawnTimer == 0) {
             addPasserby();
             spawnTimer = Math.floor(spawnInterval);
             spawnInterval -= (spawnInterval - 2) / 50.0;
         }
-
+        
         spawnTimer -= 1;
+        
+        /* Score Handler */
 
+        counter.setText('Score: ' + score);
+        score+=1;
         
     }
 }
