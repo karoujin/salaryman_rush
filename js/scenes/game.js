@@ -90,7 +90,7 @@ class GameScene extends Phaser.Scene {
             if (passerby.y > 600) {
                 passerbyGroup.killAndHide(passerby);
             }
-            else if (Math.abs(passerby.y - posY) < 5 && posX[currX] == passerby.x){
+            else if (Math.abs(passerby.y - posY) < 2.5 && posX[currX] == passerby.x){
                 alert("you lost");
                 
             }
@@ -101,7 +101,7 @@ class GameScene extends Phaser.Scene {
         if (spawnTimer == 0) {
             addPasserby();
             spawnTimer = Math.floor(spawnInterval);
-            spawnInterval -= (spawnInterval - 2) / 50.0;
+            spawnInterval -= (spawnInterval - 5) / 50.0;
         }
         
         spawnTimer -= 1;
