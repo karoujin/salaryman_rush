@@ -95,9 +95,14 @@ class GameScene extends Phaser.Scene {
             if (passerby.y > 600) {
                 passerbyGroup.killAndHide(passerby);
             }
-            else if (Math.abs(passerby.y - posY) < 5 && posX[currX] == passerby.x) {
-                alert("you lost");
-
+            else if (Math.abs(passerby.y - posY) < 2.5){
+                if (posX[currX] == passerby.x) {
+                    alert("you lost");
+                }
+                else {
+                    score += 1;
+                    counter.setText('Score: ' + score);
+                }
             }
         });
 
@@ -106,23 +111,11 @@ class GameScene extends Phaser.Scene {
         if (spawnTimer == 0) {
             addPasserby();
             spawnTimer = Math.floor(spawnInterval);
-            spawnInterval -= (spawnInterval - 2) / 50.0;
+            spawnInterval -= (spawnInterval - 5) / 50.0;
         }
 
         spawnTimer -= 1;
-
-        /* Score Handler */
-
-        counter.setText('Score: ' + score);
-        score += 1;
-
-        /* this.input.keyboard.on(Phaser.Input.Keyboard.Key.ESC, function() {
-            console.log('Pause');
-        }); */
-        if (pause.isDown) {
-            this.Scene.launch('pause');
-            this.Scene.pause();
-        }
+        
     }
 }
 
