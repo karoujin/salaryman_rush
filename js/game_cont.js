@@ -13,7 +13,6 @@ var config = {
     scene: [GameScene]
 };
 
-var cursors;
 var player;
 var buildings;
 var heightMark;
@@ -21,13 +20,16 @@ var passerbyGroup;
 
 var score = JSON.parse (sessionStorage.score);
 var counter;
+var pauseInfo;
+
+var cursors;
 var pauseKey;
 
 var sav;
 var exit;
 
 var pauseFlipFlop = false;
-var paused
+var paused = false;
 var spawnInterval = 60;
 var spawnTimer = 0;
 var posX = [config.width / 4, config.width / 2, config.width / 4 * 3];

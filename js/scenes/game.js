@@ -63,8 +63,11 @@ class GameScene extends Phaser.Scene {
             building.setVelocityY(500);
         });
 
+        /* ESC For pause menu */
+        pauseInfo = this.add.text(config.width / 5 * 3.5, 25, 'ESC - Pause Menu');
+
         /* Add score counter */
-        counter = this.add.text(config.width / 5 * 4, 50, 'Score: ' + score);
+        counter = this.add.text(config.width / 5 * 3.5, 50, 'Score: ' + score);
         /* Handler for key inputs */
         cursors = this.input.keyboard.createCursorKeys();
         pauseKey = this.input.keyboard.addKey('ESC');
