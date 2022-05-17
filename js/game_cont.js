@@ -18,12 +18,16 @@ var player;
 var buildings;
 var heightMark;
 var passerbyGroup;
+
 var score = 0;
 var counter;
-var pause;
-var cont;
+var pauseKey;
+
+var sav;
 var exit;
-var FlipFlop = false;
+
+var pauseFlipFlop = false;
+var paused
 var spawnInterval = 60;
 var spawnTimer = 0;
 var posX = [config.width / 4, config.width / 2, config.width / 4 * 3];

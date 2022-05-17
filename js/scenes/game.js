@@ -9,7 +9,7 @@ class GameScene extends Phaser.Scene {
         this.load.image('building', '../Res/building.png');
         this.load.image('line', '../Res/line.png');
         this.load.image('heightMark', '../Res/heightMark.png');
-        this.load.image('continue', '../Res/continue.png');
+        this.load.image('savinue', '../Res/continue.png');
         this.load.image('exit', '../Res/exit.png');
 
     }
@@ -39,6 +39,17 @@ class GameScene extends Phaser.Scene {
         heightMark.setScale(1, 0.2);
         heightMark.setDepth(1);
 
+        sav = this.add.sprite(config.width / 2, config.height / 3, 'savinue');
+        sav.setScale(0.3);
+        sav.setDepth(2);
+        sav.setInteractive();
+        sav.visible = false;
+        exit = this.add.sprite(config.width / 2, config.height / 3 * 2, 'exit');
+        exit.setScale(0.3);
+        exit.setDepth(2);
+        exit.setInteractive();
+        exit.visible = false;
+
         /* Create buildings and set their Vel */
         buildings = [
             this.physics.add.image(config.width / 9, 0, 'building'),
@@ -56,66 +67,105 @@ class GameScene extends Phaser.Scene {
         counter = this.add.text(config.width / 5 * 4, 50, 'Score: ' + score);
         /* Handler for key inputs */
         cursors = this.input.keyboard.createCursorKeys();
-        pause = this.input.keyboard.addKey('ESC');
+        pauseKey = this.input.keyboard.addKey('ESC');
+
+        /* Pause menu handler */
+        sav.on('pointerdown', function () {
+            console.log('Game saved');
+
+            var scores;
+            if (localStorage.scores) {
+                scores = JSON.parse(localStorage.scores);
+            }
+            console.log (typeof scores);
+            if (!Array.isArray (scores)) {
+                scores = [];
+            }
+            scores.push(score);
+            localStorage.setItem('scores', JSON.stringify(scores));
+
+            if (scores) {
+                console.log(scores);      
+            }
+        });
+        exit.on('pointerdown', function () {
+            loadpage("../index.html");
+        })
 
     }
 
     update() {
 
-        /* Movement Handler for player */
-        if (cursors.left.isDown) {
-            if (currX > 0 && lastFrameKey >= 0) {
-                currX -= 1;
-            }
-            lastFrameKey = -1;
+        if (pauseKey.isDown && !pauseFlipFlop) {
+            pauseFlipFlop = true;
+            paused = !paused;
         }
-        else if (cursors.right.isDown) {
-            if (currX < 2 && lastFrameKey <= 0) {
-                currX += 1
+        if (pauseKey.isUp) {
+            pauseFlipFlop = false;
+        }
+        if (!paused) {
+            sav.visible = false;
+            exit.visible = false;
+
+            /* Movement Handler for player */
+            if (cursors.left.isDown) {
+                if (currX > 0 && lastFrameKey >= 0) {
+                    currX -= 1;
+                }
+                lastFrameKey = -1;
             }
-            lastFrameKey = 1;
+            else if (cursors.right.isDown) {
+                if (currX < 2 && lastFrameKey <= 0) {
+                    currX += 1
+                }
+                lastFrameKey = 1;
+            }
+            else {
+                lastFrameKey = 0;
+            }
+            player.setPosition(posX[currX], posY);
+
+            /* Passerby movement */
+            Phaser.Actions.IncY(passerbyGroup.getChildren(), 5);
+
+            /* Loop for building "generation" */
+            buildings.forEach(building => {
+                if (building.y > 700) {
+                    building.y = -100;
+                }
+            });
+
+            /* Handler for Passerby iterations */
+            passerbyGroup.children.iterate(function (passerby) {
+                if (passerby.y > 600) {
+                    passerbyGroup.killAndHide(passerby);
+                }
+                else if (Math.abs(passerby.y - posY) < 2.5) {
+                    if (posX[currX] == passerby.x) {
+                        alert("you lost");
+                        /* loadpage('../index.html'); */
+                    }
+                    else {
+                        score += 1;
+                        counter.setText('Score: ' + score);
+                    }
+                }
+            });
+
+
+            /* Generation timer for Passerby */
+            if (spawnTimer == 0) {
+                addPasserby();
+                spawnTimer = Math.floor(spawnInterval);
+                spawnInterval -= (spawnInterval - 5) / 50.0;
+            }
+
+            spawnTimer -= 1;
         }
         else {
-            lastFrameKey = 0;
+            sav.visible = true;
+            exit.visible = true;
         }
-        player.setPosition(posX[currX], posY);
-
-        /* Passerby movement */
-        Phaser.Actions.IncY(passerbyGroup.getChildren(), 5);
-
-        /* Loop for building "generation" */
-        buildings.forEach(building => {
-            if (building.y > 700) {
-                building.y = -100;
-            }
-        });
-
-        /* Handler for Passerby iterations */
-        passerbyGroup.children.iterate(function (passerby) {
-            if (passerby.y > 600) {
-                passerbyGroup.killAndHide(passerby);
-            }
-            else if (Math.abs(passerby.y - posY) < 2.5){
-                if (posX[currX] == passerby.x) {
-                    alert("you lost");
-                }
-                else {
-                    score += 1;
-                    counter.setText('Score: ' + score);
-                }
-            }
-        });
-
-
-        /* Generation timer for Passerby */
-        if (spawnTimer == 0) {
-            addPasserby();
-            spawnTimer = Math.floor(spawnInterval);
-            spawnInterval -= (spawnInterval - 5) / 50.0;
-        }
-
-        spawnTimer -= 1;
-        
     }
 }
 
