@@ -143,8 +143,8 @@ class GameScene extends Phaser.Scene {
                 }
                 else if (Math.abs(passerby.y - posY) < 2.5) {
                     if (posX[currX] == passerby.x) {
-                        alert("you lost");
-                        /* loadpage('../index.html'); */
+                        alert("Game over: you got " + score + " points");
+                        loadpage('../index.html');
                     }
                     else {
                         score += 1;
