@@ -19,7 +19,7 @@ var buildings;
 var heightMark;
 var passerbyGroup;
 
-var score = 0;
+var score = JSON.parse (sessionStorage.score);
 var counter;
 var pauseKey;
 

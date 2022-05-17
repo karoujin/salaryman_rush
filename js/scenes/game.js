@@ -77,16 +77,14 @@ class GameScene extends Phaser.Scene {
             if (localStorage.scores) {
                 scores = JSON.parse(localStorage.scores);
             }
-            console.log (typeof scores);
+            
             if (!Array.isArray (scores)) {
                 scores = [];
             }
             scores.push(score);
             localStorage.setItem('scores', JSON.stringify(scores));
 
-            if (scores) {
-                console.log(scores);      
-            }
+            loadpage('../index.html');
         });
         exit.on('pointerdown', function () {
             loadpage("../index.html");
