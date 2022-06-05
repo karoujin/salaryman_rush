@@ -51,17 +51,17 @@ class GameScene extends Phaser.Scene {
         exit.visible = false;
 
         /* Create buildings and set their Vel */
-        buildings = [
-            this.physics.add.image(config.width / 9, 0, 'building'),
-            this.physics.add.image(config.width / 9, -200, 'building'),
-            this.physics.add.image(config.width / 9, -400, 'building'),
-            this.physics.add.image(config.width / 9, -600, 'building')
-        ];
+        // buildings = [
+        //     this.physics.add.image(config.width / 9, 0, 'building'),
+        //     this.physics.add.image(config.width / 9, -200, 'building'),
+        //     this.physics.add.image(config.width / 9, -400, 'building'),
+        //     this.physics.add.image(config.width / 9, -600, 'building')
+        // ];
 
-        buildings.forEach(building => {
-            building.setScale(0.2);
-            building.setVelocityY(500);
-        });
+        // buildings.forEach(building => {
+        //     building.setScale(0.2);
+        //     building.setVelocityY(500);
+        // });
 
         /* ESC For pause menu */
         pauseInfo = this.add.text(config.width / 5 * 3.5, 25, 'ESC - Pause Menu');
@@ -130,11 +130,11 @@ class GameScene extends Phaser.Scene {
             Phaser.Actions.IncY(passerbyGroup.getChildren(), 5);
 
             /* Loop for building "generation" */
-            buildings.forEach(building => {
-                if (building.y > 700) {
-                    building.y = -100;
-                }
-            });
+            // buildings.forEach(building => {
+            //     if (building.y > 700) {
+            //         building.y = -100;
+            //     }
+            // });
 
             /* Handler for Passerby iterations */
             passerbyGroup.children.iterate(function (passerby) {
