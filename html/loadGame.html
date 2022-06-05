@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/main.css">
     <script src="../js/loader.js"></script>
     <script src="../js/loadpage_cont.js"></script>
 
@@ -12,13 +13,14 @@
 
 <body>
     <div id="saves_id">
-        <h1>LOAD GAME</h1>
+        <h1 class="menu_object" id="title">LOAD GAME</h1>
         <div v-for="(score, index) in saves">
-            <button v-on:click="load(index)">
+            <button v-on:click="load(index)" class="menu_object">
                 {{score}}
             </button>
         </div>
     </div>
+    <button onclick="mainMenu()">Go to Menu</button>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 <script src="../js/load.js"></script>

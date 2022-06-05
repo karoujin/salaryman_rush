@@ -6,3 +6,7 @@ function newGame (url) {
     sessionStorage.score = 0;
     loadpage (url);
 }
+
+function mainMenu (){
+    loadpage("../");
+}
